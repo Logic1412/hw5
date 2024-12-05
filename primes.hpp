@@ -7,8 +7,6 @@
 #include <climits>
 #include <iostream>
 
-
-
 class Primes
 {
     static std::vector<long long> allprimes;
@@ -16,13 +14,26 @@ class Primes
     static bool isprime(long long value)
     {
         (void) value;
-        std::cout << "IMPLEMENT ME!\n";
-        return false;
+        if (value < 2)
+            return false;
+        for (long long prime : allprimes)
+        {
+            if (prime * prime > value)
+                break;
+            if (value % prime == 0)
+                return false;
+        }
+        return true;
     }
 
     static void calculate_next_prime()
     {
-        std::cout << "IMPLEMENT ME!\n";  
+        long long candidate = allprimes.back() + 1;
+        while (!isprime(candidate))
+        {
+            candidate++;
+        }
+        allprimes.push_back(candidate);
     }
 
     size_t index;
@@ -76,8 +87,11 @@ public:
 
     long long operator*() const
     {
-        std::cout << "IMPLEMENT ME!\n";  
-        return 0;
+        while (index >= allprimes.size())
+        {
+            calculate_next_prime();
+        }
+        return allprimes[index];
     }
 
     // Iterator traits:
@@ -89,7 +103,6 @@ public:
     {
         return Primes(INT_MAX);
     }
-
 };
 
 static_assert(std::bidirectional_iterator<Primes>);
